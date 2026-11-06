@@ -6,14 +6,14 @@ Ansible deploys a minimal Node + Express app to a bare-metal Ubuntu 26.04 target
 
 - Ubuntu 26.04 (or WSL2 running Ubuntu 26.04). macOS and native Windows are not supported for integration tests.
 - LXD initialized: `sudo lxd init --minimal` (usually once).
-- Node.js, npm, and Ansible from Ubuntu packages.
+- Node.js and npm (installed via actions/setup-node in CI); Ansible (installed via Ubuntu packages in CI).
 - Ansible is the control node, so it must run on Linux/WSL2 even on Windows.
 
 ## Install
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y nodejs npm ansible ansible-lint yamllint
+sudo apt-get install -y ansible ansible-lint yamllint
 npm ci
 npm run ensure:lxd
 ```

@@ -16,10 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Install Node.js, npm, and Ansible from Ubuntu packages
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install Ansible from Ubuntu packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y nodejs npm ansible
+          sudo apt-get install -y ansible
       - name: Install npm dependencies
         run: npm ci
       - name: TypeScript check
@@ -37,10 +40,13 @@ jobs:
         uses: canonical/setup-lxd@v1
       - name: Initialize LXD
         run: sudo lxd init --minimal
-      - name: Install Node.js, npm, and Ansible from Ubuntu packages
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install Ansible from Ubuntu packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y nodejs npm ansible
+          sudo apt-get install -y ansible
       - name: Bootstrap (npm dev deps)
         run: npm ci
       - name: One-click integration test (LXC)
