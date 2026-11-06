@@ -8,7 +8,6 @@
     "app:start": "node app/server.js",
     "inttest": "node scripts/inttest.ts",
     "inttest:self": "node scripts/self.ts",
-    "inttest:extended": "EXTENDED=1 node scripts/inttest.ts",
     "test:http": "node scripts/test-http-run.ts",
     "check:ts": "tsc --noEmit",
     "ensure:lxd": "node scripts/ensure-lxd.ts"

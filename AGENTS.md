@@ -10,7 +10,6 @@ LXC is the test-target simulator only. Ansible is the primary IaC layer. Deploym
 
 - No POSIX shell scripts for orchestration/test flow. Use TypeScript executed by Node.
 - No LXC usage outside `scripts/lxd.ts` and inventory generation. Never add container semantics to roles.
-- `features.mysql` stays false by default; extended profile is opt-in.
 - Node app binds 0.0.0.0.
 - Systemd unit uses `EnvironmentFile`.
 - Keep `app_backend` conditional and backend file split.

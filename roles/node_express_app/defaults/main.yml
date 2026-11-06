@@ -8,6 +8,3 @@ app_backend: native
 app_log_level: info
 app_node_env: production
 node_bin: /usr/bin/node
-features:
-  mysql: false
-mysql_url: ""

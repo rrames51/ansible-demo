@@ -48,7 +48,6 @@ function readEnv(name: string, defaultValue: string): string {
 }
 
 async function main(): Promise<void> {
-  const extended = process.env.EXTENDED === '1';
   const state = makeRunState();
   fs.mkdirSync(state.runDir, { recursive: true });
 
@@ -89,7 +88,6 @@ async function main(): Promise<void> {
       app_name: 'node-express-app',
       app_port: 3000,
       app_log_level: readEnv('APP_LOG_LEVEL', 'info'),
-      features: { mysql: extended },
     });
 
     logger.log('[inttest] deploying with Ansible...');

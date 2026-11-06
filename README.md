@@ -25,7 +25,6 @@ npm run ensure:lxd
 ```bash
 npm run check:ts
 npm run inttest
-npm run inttest:extended     # opt-in MySQL memo profile
 npm run inttest:self         # deploy on the current host (Linux only)
 ```
 
@@ -39,7 +38,7 @@ npm run inttest:self         # deploy on the current host (Linux only)
 
 ## Config knobs
 
-`roles/node_express_app/templates/app.env.j2` renders `PORT`, `APP_NAME`, `LOG_LEVEL`, `NODE_ENV`, optional `MYSQL_URL`.
+`roles/node_express_app/templates/app.env.j2` renders `PORT`, `APP_NAME`, `LOG_LEVEL`, and `NODE_ENV`.
 
 ## Notes
 

@@ -6,6 +6,3 @@ app_group: appsvc
 app_root: /opt/node-express-app
 app_log_level: info
 app_node_env: production
-features:
-  mysql: false
-mysql_url: ""
