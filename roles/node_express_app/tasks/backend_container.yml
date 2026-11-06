@@ -1,0 +1,5 @@
+---
+- name: Container backend not implemented yet
+  ansible.builtin.fail:
+    msg: app_backend=container is a documented seam only. Implement container_runtime role when LXC/Podman is approved.
+  when: true

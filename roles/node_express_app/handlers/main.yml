@@ -1,0 +1,9 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart node-express app
+  ansible.builtin.systemd:
+    name: "{{ app_name }}"
+    state: restarted

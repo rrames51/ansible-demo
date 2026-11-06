@@ -1,0 +1,11 @@
+node_modules/
+.run/
+app/node_modules/
+*.retry
+.ansible/
+.vault_pass
+.env
+*.env.local
+__pycache__/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,16 @@
+[Unit]
+Description={{ app_name }} (Node + Express)
+After=network.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+Group={{ app_group }}
+WorkingDirectory={{ app_root }}
+EnvironmentFile={{ app_root }}/.env
+ExecStart={{ node_bin }} {{ app_root }}/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

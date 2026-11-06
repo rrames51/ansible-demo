@@ -1,0 +1,13 @@
+---
+app_name: node-express-app
+app_port: 3000
+app_user: appsvc
+app_group: appsvc
+app_root: /opt/node-express-app
+app_backend: native
+app_log_level: info
+app_node_env: production
+node_bin: /usr/bin/node
+features:
+  mysql: false
+mysql_url: ""

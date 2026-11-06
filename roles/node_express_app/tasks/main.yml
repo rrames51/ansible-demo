@@ -1,0 +1,51 @@
+---
+- name: Ensure application directory exists
+  ansible.builtin.file:
+    path: "{{ app_root }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Stage application source
+  ansible.builtin.copy:
+    src: "{{ playbook_dir | dirname }}/app/{{ item }}"
+    dest: "{{ app_root }}/{{ item }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: preserve
+  loop:
+    - server.js
+    - package.json
+    - package-lock.json
+  notify: Restart node-express app
+
+- name: Render environment file
+  ansible.builtin.template:
+    src: app.env.j2
+    dest: "{{ app_root }}/.env"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0640'
+  notify: Restart node-express app
+
+- name: Install application dependencies
+  ansible.builtin.command:
+    cmd: npm ci --omit=dev
+    chdir: "{{ app_root }}"
+  become_user: "{{ app_user }}"
+  become: true
+  environment:
+    HOME: "{{ app_root }}"
+    DEBIAN_FRONTEND: noninteractive
+  register: npm_result
+  changed_when: true
+
+- name: Deploy backend-specific service
+  ansible.builtin.include_tasks: "backend_{{ app_backend }}.yml"
+  when: app_backend in ['native', 'container']
+
+- name: Unsupported backend guard
+  ansible.builtin.fail:
+    msg: "Unsupported app_backend '{{ app_backend }}'."
+  when: app_backend not in ['native', 'container']

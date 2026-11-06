@@ -1,0 +1,26 @@
+---
+- name: Install Node.js and npm from Ubuntu packages
+  ansible.builtin.apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+    install_recommends: false
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Verify Node.js version
+  ansible.builtin.command: node --version
+  register: node_version
+  changed_when: false
+
+- name: Verify npm version
+  ansible.builtin.command: npm --version
+  register: npm_version
+  changed_when: false
+
+- name: Show Node.js and npm versions
+  ansible.builtin.debug:
+    msg:
+      - "Node.js {{ node_version.stdout }}"
+      - "npm {{ npm_version.stdout }}"

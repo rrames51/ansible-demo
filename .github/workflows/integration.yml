@@ -1,0 +1,56 @@
+name: integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: integration-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Node.js, npm, and Ansible from Ubuntu packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm ansible
+      - name: Install npm dependencies
+        run: npm ci
+      - name: TypeScript check
+        run: npm run check:ts
+      - name: Syntax check
+        run: ansible-playbook --syntax-check -i inventories/lxc/hosts.ini playbooks/site.yml
+
+  integration:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup LXD
+        uses: canonical/setup-lxd@v1
+      - name: Initialize LXD
+        run: sudo lxd init --minimal
+      - name: Install Node.js, npm, and Ansible from Ubuntu packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm ansible
+      - name: Bootstrap (npm dev deps)
+        run: npm ci
+      - name: One-click integration test (LXC)
+        run: npm run inttest
+      - name: Diagnostics on failure
+        if: always()
+        run: |
+          if lxc list --format csv 2>/dev/null | grep -q node-express-inttest; then
+            name=$(lxc list --format csv 2>/dev/null | grep node-express-inttest | cut -d, -f1 | head -1)
+            echo "Container logs for $name:"
+            lxc exec "$name" -- journalctl -u node-express-app -n 200 --no-pager || true
+            lxc delete "$name" --force || true
+          fi
