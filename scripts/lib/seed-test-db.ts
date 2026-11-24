@@ -114,7 +114,7 @@ export interface ExtraUserSpec {
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly password: string;
+  readonly password?: string;
   /** dc.Admins role id (FK to AdminRoles). */
   readonly adminRole?: number;
   /** Legacy dc.admins string role; seeded with the dead hex+salt format. */
@@ -152,7 +152,7 @@ const ExtraUserSchema = z.object({
   email: z.string().email(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  password: z.string().min(1),
+  password: z.string().min(1).optional(),
   adminRole: z.number().int().optional(),
   legacyRole: z.enum(['SuperAdmin', 'Admin']).optional(),
   customer: z.boolean().optional(),

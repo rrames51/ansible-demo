@@ -325,9 +325,29 @@ async function main(): Promise<void> {
           database: 'dc',
         });
 
+        const testPasswords = JSON.parse(
+          idp.testPasswordsJson,
+        ) as Record<string, string>;
+
         await timer.run('seed test database', (ctx) =>
           seedTestDb(mysqlConfig, {
-            passwords: JSON.parse(idp.testPasswordsJson),
+            count: 0,
+            extraUsers: TEST_USERS.map((user) => ({
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+                ...(user.password
+                ? { password: testPasswords[user.email] }
+                : {}),
+              adminRole: user.adminRole,
+              legacyRole: user.legacyRole,
+              customer: user.customer,
+              alsoCustomer: user.alsoCustomer,
+              inactive: user.inactive,
+              blocked: user.blocked,
+              unverified: user.unverified,
+              mustChange: user.mustChange,
+            })),
           }),
         );
 
